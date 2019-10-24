@@ -26,17 +26,13 @@ You can also see it in action with the
 Install
 -------
 
-Get the distributed unminimized files:
+Get the distributed unminimized file:
 
 * [cornerstoneWADOImageLoader.js](https://unpkg.com/cornerstone-wado-image-loader/dist/cornerstoneWADOImageLoader.js)
-* [cornerstoneWADOImageLoaderCodecs.js](https://unpkg.com/cornerstone-wado-image-loader/dist/cornerstoneWADOImageLoaderCodecs.js)
-* [cornerstoneWADOImageLoaderWebWorker.js](https://unpkg.com/cornerstone-wado-image-loader/dist/cornerstoneWADOImageLoaderWebWorker.js)
 
-or the distributed minimized files:
+or the distributed minimized file:
 
 * [cornerstoneWADOImageLoader.min.js](https://unpkg.com/cornerstone-wado-image-loader/dist/cornerstoneWADOImageLoader.min.js)
-* [cornerstoneWADOImageLoaderCodecs.min.js](https://unpkg.com/cornerstone-wado-image-loader/dist/cornerstoneWADOImageLoaderCodecs.min.js)
-* [cornerstoneWADOImageLoaderWebWorker.min.js](https://unpkg.com/cornerstone-wado-image-loader/dist/cornerstoneWADOImageLoaderWebWorker.min.js)
 
 Usage
 -------
@@ -53,16 +49,12 @@ The cornerstoneWADOImageLoader depends on the following external libraries which
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
 ````
 
-Have your code configure the web worker framework with the paths to the web worker and the codecs:
+Have your code configure the web worker framework:
 
 ```javascript
-   var config = {
-        webWorkerPath : '../../dist/cornerstoneWADOImageLoaderWebWorker.js',
-        taskConfiguration: {
-            'decodeTask' : {
-                codecsPath: '../dist/cornerstoneWADOImageLoaderCodecs.js'
-            }
-        }
+    var config = {
+        maxWebWorkers: navigator.hardwareConcurrency || 1,
+        startWebWorkersOnDemand : true,
     };
     cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 ```
@@ -122,6 +114,12 @@ Copyright
 ============
 Copyright 2016 Chris Hafey [chafey@gmail.com](mailto:chafey@gmail.com)
 
+<!--
+  LINKS
+-->
+
+<!-- prettier-ignore-start -->
+
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
 [license-url]: LICENSE
 
@@ -134,3 +132,5 @@ Copyright 2016 Chris Hafey [chafey@gmail.com](mailto:chafey@gmail.com)
 
 [coverage-url]: https://coveralls.io/github/cornerstonejs/cornerstoneWADOImageLoader?branch=master
 [coverage-image]: https://coveralls.io/repos/github/cornerstonejs/cornerstoneWADOImageLoader/badge.svg?branch=master
+
+<!-- prettier-ignore-end -->

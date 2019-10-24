@@ -3,6 +3,7 @@ import getNumberValues from './getNumberValues.js';
 import parseImageId from '../parseImageId.js';
 import dataSetCacheManager from '../dataSetCacheManager.js';
 import getImagePixelModule from './getImagePixelModule.js';
+import getOverlayPlaneModule from './getOverlayPlaneModule.js';
 import getLUTs from './getLUTs.js';
 import getModalityLUTOutputPixelRepresentation from './getModalityLUTOutputPixelRepresentation.js';
 
@@ -42,6 +43,7 @@ function metaDataProvider (type, imageId) {
     const pixelSpacing = getNumberValues(dataSet, 'x00280030', 2) || getNumberValues(dataSet, 'x00181164', 2);
 
     let columnPixelSpacing = null;
+
     let rowPixelSpacing = null;
 
     if (pixelSpacing) {
@@ -50,6 +52,7 @@ function metaDataProvider (type, imageId) {
     }
 
     let rowCosines = null;
+
     let columnCosines = null;
 
     if (imageOrientationPatient) {
@@ -121,6 +124,10 @@ function metaDataProvider (type, imageId) {
         radionuclideHalfLife: firstRadiopharmaceuticalInfoDataSet.floatString('x00181075')
       }
     };
+  }
+
+  if (type === 'overlayPlaneModule') {
+    return getOverlayPlaneModule(dataSet);
   }
 }
 

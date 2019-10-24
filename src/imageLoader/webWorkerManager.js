@@ -1,3 +1,5 @@
+import cornerstoneWADOImageLoaderWebWorker from '../webWorker/index.worker.js';
+
 import { getOptions } from './internal/options.js';
 
 // the taskId to assign to the next task added via addTask()
@@ -15,13 +17,10 @@ const options = getOptions();
 const defaultConfig = {
   maxWebWorkers: navigator.hardwareConcurrency || 1,
   startWebWorkersOnDemand: true,
-  webWorkerPath: '../../dist/cornerstoneWADOImageLoaderWebWorker.js',
   webWorkerTaskPaths: [],
   taskConfiguration: {
     decodeTask: {
-      loadCodecsOnStartup: true,
       initializeCodecsOnStartup: false,
-      codecsPath: '../dist/cornerstoneWADOImageLoaderCodecs.js',
       usePDFJS: false,
       strict: options.strict
     }
@@ -97,7 +96,9 @@ function handleMessageFromWorker (msg) {
   } else {
     const start = webWorkers[msg.data.workerIndex].task.start;
 
-    webWorkers[msg.data.workerIndex].task.deferred.resolve(msg.data.result);
+    const action = msg.data.status === 'success' ? 'resolve' : 'reject';
+    webWorkers[msg.data.workerIndex].task.deferred[action](msg.data.result);
+
     webWorkers[msg.data.workerIndex].task = undefined;
 
     statistics.numTasksExecuting--;
@@ -122,7 +123,7 @@ function spawnWebWorker () {
   }
 
   // spawn the webworker
-  const worker = new Worker(config.webWorkerPath);
+  const worker = new cornerstoneWADOImageLoaderWebWorker();
 
   webWorkers.push({
     worker,
@@ -158,6 +159,17 @@ function initialize (configObject) {
       spawnWebWorker();
     }
   }
+}
+
+/**
+ * Terminate all running web workers.
+ */
+function terminate () {
+  for (let i = 0; i < webWorkers.length; i++) {
+    webWorkers[i].worker.terminate();
+  }
+  webWorkers.length = 0;
+  config = undefined;
 }
 
 /**
@@ -313,5 +325,7 @@ export default {
   addTask,
   getStatistics,
   setTaskPriority,
-  cancelTask
+  cancelTask,
+  webWorkers,
+  terminate
 };

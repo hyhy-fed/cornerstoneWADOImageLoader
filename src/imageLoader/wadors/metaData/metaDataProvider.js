@@ -2,6 +2,7 @@ import external from '../../../externalModules.js';
 import getNumberValues from './getNumberValues.js';
 import getValue from './getValue.js';
 import getNumberValue from './getNumberValue.js';
+import getOverlayPlaneModule from './getOverlayPlaneModule.js';
 import metaDataManager from '../metaDataManager.js';
 
 function metaDataProvider (type, imageId) {
@@ -35,8 +36,9 @@ function metaDataProvider (type, imageId) {
     const imageOrientationPatient = getNumberValues(metaData['00200037'], 6);
     const imagePositionPatient = getNumberValues(metaData['00200032'], 3);
     const pixelSpacing = getNumberValues(metaData['00280030'], 2) || getNumberValues(metaData['00181164'], 2);
-    
+
     let columnPixelSpacing = null;
+
     let rowPixelSpacing = null;
 
     if (pixelSpacing) {
@@ -45,6 +47,7 @@ function metaDataProvider (type, imageId) {
     }
 
     let rowCosines = null;
+
     let columnCosines = null;
 
     if (imageOrientationPatient) {
@@ -131,6 +134,9 @@ function metaDataProvider (type, imageId) {
     };
   }
 
+  if (type === 'overlayPlaneModule') {
+    return getOverlayPlaneModule(metaData);
+  }
 }
 
 export default metaDataProvider;
