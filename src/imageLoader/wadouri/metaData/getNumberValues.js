@@ -1,5 +1,6 @@
 function getNumberValues (dataSet, tag, minimumLength) {
   const values = [];
+
   let valueAsString = dataSet.string(tag);
 
   if (!valueAsString) {
