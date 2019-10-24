@@ -58,10 +58,10 @@ module.exports = {
         }
       },
     },*/ {
-      test: path.join(codecs, 'openJPEG-FixedMemory.js'),
+      test: path.join(codecs, 'openJPEG-DynamicMemory-browser.js'),
       use: 'exports-loader?OpenJPEG'
     }, {
-      test: path.join(codecs, 'charLS-FixedMemory-browser.js'),
+      test: path.join(codecs, 'charLS-DynamicMemory-browser.js'),
       use: 'exports-loader?CharLS'
     }, {
       test: path.join(codecs, 'jpeg.js'),
