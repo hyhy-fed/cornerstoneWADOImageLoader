@@ -1,4 +1,4 @@
-import OpenJPEG from '../../../codecs/openJPEG-DynamicMemory-browser.js';
+import OpenJPEG from '../../../codecs/openJPEG-FixedMemory-browser.js';
 import JpxImage from '../../../codecs/jpx.min.js';
 
 function decodeJpx (imageFrame, pixelData) {

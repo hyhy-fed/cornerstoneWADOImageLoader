@@ -48,20 +48,17 @@ module.exports = {
         loader: 'worker-loader',
         options: { inline: true, fallback: false }
       }
-    }, /*{
-      test: /\.js$/,
-      include: /(codecs)/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          compact: false
-        }
-      },
-    },*/ {
+    }, {
       test: path.join(codecs, 'openJPEG-DynamicMemory-browser.js'),
       use: 'exports-loader?OpenJPEG'
     }, {
+      test: path.join(codecs, 'openJPEG-FixedMemory-browser.js'),
+      use: 'exports-loader?OpenJPEG'
+    }, {
       test: path.join(codecs, 'charLS-DynamicMemory-browser.js'),
+      use: 'exports-loader?CharLS'
+    }, {
+      test: path.join(codecs, 'charLS-FixedMemory-browser.js'),
       use: 'exports-loader?CharLS'
     }, {
       test: path.join(codecs, 'jpeg.js'),
