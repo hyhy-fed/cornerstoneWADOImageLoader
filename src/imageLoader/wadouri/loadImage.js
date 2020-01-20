@@ -24,7 +24,7 @@ function loadImageFromPromise (dataSetPromise, imageId, frame = 0, sharedCacheKe
   imageLoadObject.promise = new Promise((resolve, reject) => {
     dataSetPromise.then((dataSet/* , xhr*/) => {
       const pixelData = getPixelData(dataSet, frame);
-      const transferSyntax = dataSet.string('x00020010');
+      const transferSyntax = dataSet.string('x00020010') || '1.2.840.10008.1.2.1'; // Default is Explicit Little Endian.
       const loadEnd = new Date().getTime();
       const imagePromise = createImage(imageId, pixelData, transferSyntax, options);
 
@@ -69,7 +69,7 @@ function loadImageFromDataSet (dataSet, imageId, frame = 0, sharedCacheKey, opti
 
     try {
       const pixelData = getPixelData(dataSet, frame);
-      const transferSyntax = dataSet.string('x00020010');
+      const transferSyntax = dataSet.string('x00020010') || '1.2.840.10008.1.2.1'; // Default is Explicit Little Endian.
 
       imagePromise = createImage(imageId, pixelData, transferSyntax, options);
     } catch (error) {
