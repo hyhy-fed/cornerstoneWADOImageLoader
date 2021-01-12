@@ -5,6 +5,17 @@ function xhrRequest (url, imageId, headers = {}, params = {}) {
   const { cornerstone } = external;
   const options = getOptions();
 
+  const errorInterceptor = xhr => {
+    if (typeof options.errorInterceptor === 'function') {
+      const error = new Error('request failed');
+
+      error.request = xhr;
+      error.response = xhr.response;
+      error.status = xhr.status;
+      options.errorInterceptor(error);
+    }
+  };
+
   // Make the request for the DICOM P10 SOP Instance
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -33,10 +44,14 @@ function xhrRequest (url, imageId, headers = {}, params = {}) {
       // Event
       const eventData = {
         url,
-        imageId
+        imageId,
       };
 
-      cornerstone.triggerEvent(cornerstone.events, 'cornerstoneimageloadstart', eventData);
+      cornerstone.triggerEvent(
+        cornerstone.events,
+        'cornerstoneimageloadstart',
+        eventData
+      );
     };
 
     // Event triggered when downloading an image ends
@@ -52,7 +67,11 @@ function xhrRequest (url, imageId, headers = {}, params = {}) {
       };
 
       // Event
-      cornerstone.triggerEvent(cornerstone.events, 'cornerstoneimageloadend', eventData);
+      cornerstone.triggerEvent(
+        cornerstone.events,
+        'cornerstoneimageloadend',
+        eventData
+      );
     };
 
     // handle response data
@@ -68,8 +87,16 @@ function xhrRequest (url, imageId, headers = {}, params = {}) {
       // TODO: consider sending out progress messages here as we receive the pixel data
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          resolve(xhr.response, xhr);
+          options
+            .beforeProcessing(xhr)
+            .then(resolve)
+            .catch(() => {
+              errorInterceptor(xhr);
+              // request failed, reject the Promise
+              reject(xhr);
+            });
         } else {
+          errorInterceptor(xhr);
           // request failed, reject the Promise
           reject(xhr);
         }
@@ -104,9 +131,21 @@ function xhrRequest (url, imageId, headers = {}, params = {}) {
         percentComplete
       };
 
-      cornerstone.triggerEvent(cornerstone.events, 'cornerstoneimageloadprogress', eventData);
+      cornerstone.triggerEvent(
+        cornerstone.events,
+        'cornerstoneimageloadprogress',
+        eventData
+      );
+    };
+    xhr.onerror = function () {
+      errorInterceptor(xhr);
+      reject(xhr);
     };
 
+    xhr.onabort = function () {
+      errorInterceptor(xhr);
+      reject(xhr);
+    };
     xhr.send();
   });
 }

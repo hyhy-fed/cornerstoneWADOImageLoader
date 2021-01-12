@@ -65,7 +65,7 @@ module.exports = {
     'id-blacklist': 'warn',
     'id-length': 'off',
     'id-match': 'warn',
-    'indent': ['warn', 2],
+    'indent': ['warn', 2, { SwitchCase: 1 }],
     //'init-declarations': 'warn',
     'import/default': 'warn',
     'import/export': 'warn',
@@ -87,8 +87,8 @@ module.exports = {
     ],
     //'line-comment-position': 'warn',
     'linebreak-style': [
-      'warn',
-      'unix'
+      'off',
+      'windows'
     ],
     'lines-around-comment': 'warn',
     'lines-around-directive': 'warn',
@@ -240,7 +240,7 @@ module.exports = {
     'sort-keys': 'off',
     'sort-vars': 'off',
     'space-before-blocks': 'warn',
-    'space-before-function-paren': 'warn',
+    'space-before-function-paren': ["error", "always"],
     'space-in-parens': [
       'warn',
       'never'

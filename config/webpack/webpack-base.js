@@ -1,12 +1,12 @@
 const path = require('path');
 const rootPath = process.cwd();
-const context = path.join(rootPath, "src");
-const codecs = path.join(rootPath, "codecs");
+const context = path.join(rootPath, 'src');
+const codecs = path.join(rootPath, 'codecs');
 const outputPath = path.join(rootPath, 'dist');
 const bannerPlugin = require('./plugins/banner');
 
 module.exports = {
-  mode: "development",
+  mode: 'development',
   context,
   entry: {
     cornerstoneWADOImageLoader: './imageLoader/index.js',
@@ -24,9 +24,9 @@ module.exports = {
   devtool: 'source-map',
   externals: {
     'dicom-parser': {
-      commonjs: "dicom-parser",
-      commonjs2: "dicom-parser",
-      amd: "dicom-parser",
+      commonjs: 'dicom-parser',
+      commonjs2: 'dicom-parser',
+      amd: 'dicom-parser',
       root: 'dicomParser'
     },
   },
@@ -74,8 +74,6 @@ module.exports = {
       }
     }]
   },
-  plugins: [
-    bannerPlugin(),
-  ],
+  plugins: [bannerPlugin()],
   node: { fs: 'empty' },
 };
